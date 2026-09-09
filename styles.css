@@ -13,11 +13,15 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .feed > * { animation: rise 0.25s ease-out; }
+  button, select, input, textarea, .sidebar { transition: all 0.15s ease; }
+  button:active { transform: scale(0.96); }
 }
 @keyframes rise {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+.feed { scroll-behavior: smooth; }
 
 body {
   margin: 0;
@@ -25,19 +29,28 @@ body {
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   height: 100vh;
+  height: 100dvh; /* dynamic viewport height -- accounts for mobile browser address bars */
   overflow: hidden;
 }
 
-.shell { display: flex; flex-direction: column; height: 100vh; }
+.shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  position: relative;
+}
 
 .topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 24px;
+  padding: 16px 20px;
   border-bottom: 1px solid var(--ink-line);
   flex-shrink: 0;
 }
+.topbar-left { display: flex; align-items: center; gap: 12px; }
+.topbar-right { display: flex; align-items: center; gap: 20px; }
 .wordmark { font-size: 15px; font-weight: 500; letter-spacing: 0.2px; }
 .capacity-input { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted); }
 .capacity-input input {
@@ -45,7 +58,31 @@ body {
   color: var(--text); border-radius: 6px; padding: 6px 8px; font-size: 13px;
 }
 
+.menu-toggle {
+  display: none; /* shown only on mobile, see media query */
+  background: none;
+  border: 1px solid var(--ink-line);
+  color: var(--text);
+  border-radius: 6px;
+  width: 36px;
+  height: 36px;
+  font-size: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
 .layout { display: flex; flex: 1; min-height: 0; }
+
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 30;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.sidebar-backdrop.open { display: block; opacity: 1; }
 
 /* ---------- Sidebar ---------- */
 .sidebar {
@@ -108,8 +145,7 @@ body {
 }
 .done-btn:hover { color: var(--done); border-color: var(--done); }
 
-.topbar-right { display: flex; align-items: center; gap: 20px; }
-.session-controls { display: flex; gap: 8px; }
+.session-controls { display: flex; flex-direction: column; gap: 8px; }
 .ghost-btn.danger { color: #d98a6f; border-color: #5a3f34; }
 .ghost-btn.danger:hover { border-color: #d98a6f; }
 
@@ -286,6 +322,44 @@ body {
 .composer textarea:disabled, .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 @media (max-width: 760px) {
-  .layout { flex-direction: column; }
-  .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--ink-line); max-height: 40vh; }
+  .menu-toggle { display: flex; align-items: center; justify-content: center; }
+
+  .topbar { padding: 12px 16px; }
+
+  .layout { position: relative; }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 85%;
+    max-width: 320px;
+    z-index: 31;
+    background: var(--ink);
+    border-right: 1px solid var(--ink-line);
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    padding-top: 64px; /* clears the topbar */
+  }
+  .sidebar.open { transform: translateX(0); }
+
+  .conversation-pane { width: 100%; }
+
+  .feed { padding: 16px; }
+  .bubble { max-width: 85%; }
+
+  .composer { padding: 12px; }
+
+  .sessions-panel {
+    left: 12px;
+    right: 12px;
+    width: auto;
+    top: 60px;
+  }
+}
+
+@media (max-width: 420px) {
+  .voice-status { min-width: 0; font-size: 11px; }
+  .composer { flex-wrap: nowrap; }
 }

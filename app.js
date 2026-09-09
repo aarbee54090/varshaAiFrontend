@@ -1,5 +1,8 @@
-// Backend runs on its own port, separate from this frontend.
-const API = 'https://varshaai-r3ap.onrender.com/api';
+// Backend URL. For local dev this is your Render backend running
+// locally (or localhost:3000). BEFORE DEPLOYING TO VERCEL, change this
+// to your deployed Render backend's URL, e.g.
+// 'https://your-backend.onrender.com/api'
+const API = 'http://localhost:3000/api';
 
 const SESSION_TIMEOUT_MS = 4 * 60 * 60 * 1000; // 4 hours of inactivity -> new session
 
@@ -36,6 +39,7 @@ function switchToSession(sessionId) {
   renderedIds.clear();
   feedEl.innerHTML = '';
   refreshFeed();
+  closeDrawer(); // no-op on desktop, closes the mobile drawer if open
 }
 
 // ---------- Feed: merges Message (user turns) + Notification (assistant/system turns) ----------
@@ -375,6 +379,27 @@ function speakReply(text) {
   });
 }
 
+// ---------- Mobile sidebar drawer ----------
+
+const sidebar = document.getElementById('sidebar');
+const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+const menuToggleBtn = document.getElementById('menuToggleBtn');
+
+function openDrawer() {
+  sidebar.classList.add('open');
+  sidebarBackdrop.classList.add('open');
+}
+function closeDrawer() {
+  sidebar.classList.remove('open');
+  sidebarBackdrop.classList.remove('open');
+}
+
+menuToggleBtn.addEventListener('click', () => {
+  if (sidebar.classList.contains('open')) closeDrawer();
+  else openDrawer();
+});
+sidebarBackdrop.addEventListener('click', closeDrawer);
+
 // ---------- Sessions panel ----------
 
 const sessionsPanel = document.getElementById('sessionsPanel');
@@ -605,10 +630,12 @@ document.getElementById('taskForm').addEventListener('submit', async (e) => {
 document.getElementById('eveningReviewBtn').addEventListener('click', async () => {
   await fetch(`${API}/reviews/evening`, { method: 'POST' });
   refreshFeed();
+  closeDrawer();
 });
 document.getElementById('weeklyReviewBtn').addEventListener('click', async () => {
   await fetch(`${API}/reviews/weekly`, { method: 'POST' });
   refreshFeed();
+  closeDrawer();
 });
 
 // ---------- Initial load + background polling ----------
