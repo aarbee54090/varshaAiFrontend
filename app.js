@@ -2,7 +2,7 @@
 // locally (or localhost:3000). BEFORE DEPLOYING TO VERCEL, change this
 // to your deployed Render backend's URL, e.g.
 // 'https://your-backend.onrender.com/api'
-const API = 'https://varshaai-r3ap.onrender.com';
+const API = 'https://varshaai-r3ap.onrender.com/api/';
 
 const SESSION_TIMEOUT_MS = 4 * 60 * 60 * 1000; // 4 hours of inactivity -> new session
 
