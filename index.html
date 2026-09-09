@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Varsha AI</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="shell">
+
+    <header class="topbar">
+      <span class="wordmark">Varsha AI</span>
+      <div class="topbar-right">
+        <div class="session-controls">
+          <button id="sessionsBtn" class="ghost-btn">Sessions</button>
+          <button id="newChatBtn" class="ghost-btn">New chat</button>
+          <button id="deleteChatBtn" class="ghost-btn danger">Delete chat</button>
+        </div>
+        <div class="capacity-input">
+          <label for="capacityInput">Hours today</label>
+          <input type="number" id="capacityInput" min="0" step="0.5" placeholder="3" />
+          <button id="setCapacityBtn" class="ghost-btn">Set</button>
+        </div>
+      </div>
+    </header>
+
+    <div id="sessionsPanel" class="sessions-panel hidden">
+      <div class="sessions-panel-head">
+        <h2>Past sessions</h2>
+        <button id="closeSessionsBtn" class="ghost-btn">Close</button>
+      </div>
+      <ul id="sessionsList" class="quiet-list"></ul>
+    </div>
+
+    <div class="layout">
+
+      <aside class="sidebar">
+        <section class="priority-block">
+          <p class="eyebrow-quiet">Today's #1</p>
+          <p id="topTaskText" class="priority-text">—</p>
+        </section>
+
+        <section class="side-section">
+          <div class="side-section-head">
+            <h2>Goals</h2>
+          </div>
+          <form id="goalForm" class="inline-form">
+            <input type="text" id="goalTitle" placeholder="New goal" required />
+            <select id="goalWeight">
+              <option value="High">High</option>
+              <option value="Medium" selected>Medium</option>
+              <option value="Low">Low</option>
+            </select>
+            <button type="submit" class="ghost-btn">Add</button>
+          </form>
+          <ul id="goalList" class="quiet-list"></ul>
+        </section>
+
+        <section class="side-section">
+          <div class="side-section-head">
+            <h2>Tasks</h2>
+          </div>
+          <form id="taskForm" class="inline-form">
+            <input type="text" id="taskTitle" placeholder="New task" required />
+            <select id="taskGoal"><option value="">no goal</option></select>
+            <button type="submit" class="ghost-btn">Add</button>
+          </form>
+          <ul id="taskList" class="quiet-list task-list"></ul>
+        </section>
+
+        <section class="side-section reviews-section">
+          <button id="eveningReviewBtn" class="ghost-btn full">Evening review</button>
+          <button id="weeklyReviewBtn" class="ghost-btn full">Weekly review</button>
+        </section>
+      </aside>
+
+      <main class="conversation-pane">
+        <div id="feed" class="feed"></div>
+
+        <form id="messageForm" class="composer">
+          <button type="button" id="micBtn" class="mic-btn" title="Toggle voice mode">🎤</button>
+          <span id="voiceStatus" class="voice-status"></span>
+          <textarea
+            id="messageInput"
+            rows="1"
+            placeholder="Tell your assistant what's going on…"
+          ></textarea>
+          <button type="submit" class="send-btn">Send</button>
+        </form>
+      </main>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
